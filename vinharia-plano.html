@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adega — Plano de Produto</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f3ee;
+    --surface: #ffffff;
+    --surface2: #f0ebe3;
+    --border: #e0d8ce;
+    --wine: #7b1d3a;
+    --wine-light: #a8294f;
+    --wine-pale: rgba(123,29,58,0.08);
+    --gold: #b8943f;
+    --gold-pale: rgba(184,148,63,0.12);
+    --text: #1a1410;
+    --muted: #8a7e72;
+    --green: #2d6a4f;
+    --green-pale: rgba(45,106,79,0.1);
+    --blue: #1d4e89;
+    --blue-pale: rgba(29,78,137,0.1);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grain texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* HEADER */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 22px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: rgba(247,243,238,0.92);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 700;
+    font-size: 1.6rem;
+    letter-spacing: 0.5px;
+    color: var(--wine);
+    font-style: italic;
+  }
+
+  .logo span { color: var(--gold); font-style: normal; }
+
+  .header-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  /* NAV */
+  nav {
+    display: flex;
+    gap: 0;
+    padding: 0 48px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    overflow-x: auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .tab {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 14px 22px;
+    cursor: pointer;
+    color: var(--muted);
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+  }
+
+  .tab:hover { color: var(--wine); }
+  .tab.active { color: var(--wine); border-bottom-color: var(--wine); }
+
+  /* MAIN */
+  main { max-width: 980px; margin: 0 auto; padding: 52px 48px 100px; position: relative; z-index: 1; }
+
+  .section { display: none; animation: fadeIn 0.35s ease; }
+  .section.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* TYPOGRAPHY */
+  .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--wine);
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    font-weight: 600;
+    line-height: 1.05;
+    margin-bottom: 24px;
+    letter-spacing: -0.5px;
+    color: var(--text);
+  }
+
+  h1 em { color: var(--wine); font-style: italic; }
+
+  h2 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 600;
+    font-size: 1.7rem;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+
+  h3 {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 0.92rem;
+    margin-bottom: 8px;
+    color: var(--text);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  p {
+    color: #4a4037;
+    line-height: 1.8;
+    font-size: 0.97rem;
+    margin-bottom: 16px;
+    font-weight: 300;
+  }
+
+  strong { font-weight: 600; color: var(--text); }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+
+  .card-wine { border-left: 3px solid var(--wine); }
+  .card-gold { border-left: 3px solid var(--gold); }
+  .card-green { border-left: 3px solid var(--green); }
+  .card-blue { border-left: 3px solid var(--blue); }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; }
+
+  @media (max-width: 680px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    main { padding: 32px 24px 60px; }
+    nav, header { padding: 16px 24px; }
+  }
+
+  /* PHASE CARDS */
+  .phase-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+
+  .phase-header {
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+  }
+
+  .phase-header:hover { background: var(--surface2); }
+
+  .phase-number {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1.5px solid var(--wine);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--wine);
+    flex-shrink: 0;
+  }
+
+  .phase-meta { flex: 1; }
+  .phase-title { font-weight: 600; font-size: 0.97rem; margin-bottom: 2px; }
+  .phase-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+
+  .phase-toggle {
+    color: var(--muted);
+    font-size: 1.2rem;
+    transition: transform 0.2s;
+  }
+
+  .phase-toggle.open { transform: rotate(180deg); }
+
+  .phase-body {
+    padding: 24px;
+    display: none;
+  }
+
+  .phase-body.open { display: block; }
+
+  /* TIMELINE */
+  .timeline { position: relative; padding-left: 40px; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 11px;
+    top: 6px;
+    bottom: 6px;
+    width: 1px;
+    background: var(--border);
+  }
+
+  .tl-item {
+    position: relative;
+    margin-bottom: 24px;
+  }
+
+  .tl-dot {
+    position: absolute;
+    left: -34px;
+    top: 4px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--wine);
+    border: 2px solid var(--bg);
+    box-shadow: 0 0 0 1px var(--wine);
+  }
+
+  .tl-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  th {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    font-weight: 400;
+  }
+  td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    color: #4a4037;
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  tr:last-child td { border-bottom: none; }
+  .hl { color: var(--wine); font-weight: 600; }
+
+  /* TAG */
+  .tag {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 3px 8px;
+    border-radius: 2px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+  }
+
+  .tag-wine { background: var(--wine-pale); color: var(--wine); border: 1px solid rgba(123,29,58,0.2); }
+  .tag-gold { background: var(--gold-pale); color: var(--gold); border: 1px solid rgba(184,148,63,0.25); }
+  .tag-green { background: var(--green-pale); color: var(--green); border: 1px solid rgba(45,106,79,0.2); }
+  .tag-blue { background: var(--blue-pale); color: var(--blue); border: 1px solid rgba(29,78,137,0.2); }
+
+  /* CHECKLIST */
+  .checklist { list-style: none; }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+    color: #4a4037;
+    line-height: 1.5;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .chk {
+    width: 16px;
+    height: 16px;
+    border-radius: 2px;
+    border: 1.5px solid var(--border);
+    flex-shrink: 0;
+    margin-top: 2px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+  }
+  .chk.done { background: var(--wine); border-color: var(--wine); color: #fff; }
+
+  /* METRIC */
+  .metric-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+  }
+  .metric-row:last-child { border-bottom: none; }
+  .metric-label { color: var(--muted); }
+  .metric-value { font-family: 'DM Mono', monospace; font-size: 0.85rem; color: var(--text); }
+
+  /* BIG STAT */
+  .stat-card {
+    text-align: center;
+    padding: 28px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--wine);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  /* CODE */
+  .code-block {
+    background: #1a1410;
+    border-radius: 4px;
+    padding: 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    line-height: 1.8;
+    color: #d4c9bc;
+    overflow-x: auto;
+    margin-bottom: 16px;
+  }
+  .code-comment { color: #6b5e52; }
+  .code-keyword { color: #c97b5a; }
+  .code-string { color: #8fad7a; }
+  .code-type { color: #7ab8c7; }
+  .code-pk { color: var(--gold); }
+
+  /* FLOW */
+  .flow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 14px 0; }
+  .flow-step {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 7px 13px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--text);
+  }
+  .flow-arr { color: var(--wine); font-size: 1rem; }
+
+  /* DIVIDER */
+  hr { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+
+  /* BLOCKQUOTE */
+  blockquote {
+    border-left: 3px solid var(--wine);
+    padding: 16px 24px;
+    margin: 24px 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.3rem;
+    color: var(--wine);
+    background: var(--wine-pale);
+    border-radius: 0 4px 4px 0;
+    line-height: 1.6;
+  }
+
+  /* RISK */
+  .risk-item {
+    display: flex;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .risk-item:last-child { border-bottom: none; }
+  .risk-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    padding: 3px 8px;
+    border-radius: 2px;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 2px;
+  }
+
+  /* STACK ROW */
+  .stack-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .stack-row:last-child { border-bottom: none; }
+  .stack-layer {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    width: 90px;
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+  .stack-tech { font-weight: 600; font-size: 0.88rem; color: var(--text); }
+  .stack-why { font-size: 0.82rem; color: var(--muted); margin-top: 2px; }
+
+  .ornament {
+    text-align: center;
+    color: var(--wine);
+    opacity: 0.3;
+    font-size: 1.5rem;
+    margin: 8px 0;
+    letter-spacing: 8px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><em>Adega</em><span>·</span>Club</div>
+  <div class="header-tag">Plano de Produto · 2026</div>
+</header>
+
+<nav>
+  <button class="tab active" onclick="show('visao')">01 · Visão Geral</button>
+  <button class="tab" onclick="show('fases')">02 · Fases do Produto</button>
+  <button class="tab" onclick="show('tech')">03 · Arquitetura Tech</button>
+  <button class="tab" onclick="show('negocio')">04 · Negócio & Pitch</button>
+  <button class="tab" onclick="show('acao')">05 · Próximos Passos</button>
+</nav>
+
+<main>
+
+<!-- ========== VISÃO GERAL ========== -->
+<section id="visao" class="section active">
+  <span class="eyebrow">Visão do Produto</span>
+  <h1>Um marketplace de vinho feito com <em>inteligência</em></h1>
+
+  <blockquote>
+    "O DV Catena custa R$40 na Argentina e R$250 aqui. A diferença não é o vinho — são os impostos e a cadeia de distribuição. Nossa plataforma conecta pessoas que querem economizar com quem pode fornecer legalmente."
+  </blockquote>
+
+  <div class="grid-4" style="margin: 32px 0;">
+    <div class="stat-card">
+      <div class="stat-num">4x</div>
+      <div class="stat-label">diferença média de preço BR vs Argentina</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">R$9bi</div>
+      <div class="stat-label">mercado brasileiro de vinhos em 2024</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">18%</div>
+      <div class="stat-label">crescimento anual do mercado premium</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">12M</div>
+      <div class="stat-label">consumidores regulares de vinho no Brasil</div>
+    </div>
+  </div>
+
+  <hr>
+
+  <h2>O modelo em quatro camadas</h2>
+  <p>A visão completa do produto — cada camada financia a próxima e cria dados que fortalecem as anteriores.</p>
+
+  <div style="display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 20px;">
+
+    <div class="card card-blue">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div>
+          <span class="tag tag-blue">Camada 1 · MVP</span>
+          <h3 style="margin-top: 8px;">Comparador de Preços</h3>
+          <p style="margin: 0; font-size: 0.9rem;">Pesquisa um vinho, vê onde está mais barato no Brasil agora. Sem estoque, sem CNPJ especial, sem risco. Gera base de usuários e dados de demanda.</p>
+        </div>
+        <div style="font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--muted); white-space:nowrap; margin-left:16px;">Mês 1–2</div>
+      </div>
+    </div>
+
+    <div class="card card-gold">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div>
+          <span class="tag tag-gold">Camada 2 · Receita</span>
+          <h3 style="margin-top: 8px;">Clube de Assinatura Curado</h3>
+          <p style="margin: 0; font-size: 0.9rem;">Seleção mensal de vinhos pelo parceiro sommelier. Importados legais + nacionais premium. Modelo de assinatura recorrente. Primeira fonte de receita real.</p>
+        </div>
+        <div style="font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--muted); white-space:nowrap; margin-left:16px;">Mês 3–6</div>
+      </div>
+    </div>
+
+    <div class="card card-wine">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div>
+          <span class="tag tag-wine">Camada 3 · Diferencial</span>
+          <h3 style="margin-top: 8px;">Compra Coletiva com Importador</h3>
+          <p style="margin: 0; font-size: 0.9rem;">Usuários demonstram interesse em um vinho específico. Ao atingir volume mínimo, o importador parceiro fecha o lote. Preço cai 30–50% vs varejo. Aqui está o verdadeiro valor do app.</p>
+        </div>
+        <div style="font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--muted); white-space:nowrap; margin-left:16px;">Mês 6–12</div>
+      </div>
+    </div>
+
+    <div class="card card-green">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div>
+          <span class="tag tag-green">Camada 4 · Escala</span>
+          <h3 style="margin-top: 8px;">Importação Própria</h3>
+          <p style="margin: 0; font-size: 0.9rem;">Com volume e caixa, a empresa habilita CNPJ importador junto à Receita Federal. Capta a margem total. Parceiros fornecedores viram distribuidores regionais.</p>
+        </div>
+        <div style="font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--muted); white-space:nowrap; margin-left:16px;">Ano 2+</div>
+      </div>
+    </div>
+
+  </div>
+
+  <hr>
+
+  <h2>O que te diferencia do Wine.com.br</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Wine.com.br (concorrente)</h3>
+      <ul class="checklist">
+        <li><div class="chk done">✓</div>Grande catálogo e logística própria</li>
+        <li><div class="chk done">✓</div>Marca consolidada</li>
+        <li><div class="chk" onclick="toggle(this)"></div>Preços sem negociação coletiva</li>
+        <li><div class="chk" onclick="toggle(this)"></div>Sem foco em vinhos sul-americanos premium acessíveis</li>
+        <li><div class="chk" onclick="toggle(this)"></div>Não tem comunidade de compradores</li>
+      </ul>
+    </div>
+    <div class="card card-wine">
+      <h3>AdegaClub (você)</h3>
+      <ul class="checklist">
+        <li><div class="chk done">✓</div>Demanda coletiva → preço de atacado</li>
+        <li><div class="chk done">✓</div>Curadoria por sommelier — não algoritmo</li>
+        <li><div class="chk done">✓</div>Foco em Argentina, Chile, Uruguai</li>
+        <li><div class="chk done">✓</div>Comunidade que co-define o catálogo</li>
+        <li><div class="chk done">✓</div>Transparência de preço (origem vs BR)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FASES ========== -->
+<section id="fases" class="section">
+  <span class="eyebrow">Roadmap do Produto</span>
+  <h1>Quatro fases,<br><em>uma visão</em></h1>
+  <p>Cada fase é viável por si só e financia a próxima. Você não precisa de investimento para começar — só de disciplina para não pular etapas.</p>
+
+  <!-- FASE 1 -->
+  <div class="phase-card">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <div class="phase-number">I</div>
+      <div class="phase-meta">
+        <div class="phase-title">Comparador de Preços — "O Google Flights do vinho"</div>
+        <div class="phase-sub">Meses 1–2 · Custo estimado: R$ 0–2.000</div>
+      </div>
+      <div class="phase-toggle">▾</div>
+    </div>
+    <div class="phase-body">
+      <p>Um site simples onde o usuário pesquisa um vinho (por nome, uva ou região) e vê os preços em tempo real nas principais lojas brasileiras. Sem estoque, sem logística, sem risco legal.</p>
+
+      <div class="grid-2">
+        <div class="card card-gold">
+          <h3>Como funciona</h3>
+          <div class="flow" style="flex-direction: column; align-items: flex-start; gap: 6px;">
+            <div class="flow-step">Scraping de Evino, Wine, Vivino, Divvino</div>
+            <div class="flow-arr">↓</div>
+            <div class="flow-step">Base de dados normalizada de vinhos</div>
+            <div class="flow-arr">↓</div>
+            <div class="flow-step">Usuário pesquisa → vê ranking de preços</div>
+            <div class="flow-arr">↓</div>
+            <div class="flow-step">Botão "me avise se baixar" → captura email</div>
+          </div>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom: 12px;">
+            <h3>O que você ganha</h3>
+            <p style="font-size: 0.88rem; margin: 0; color: var(--muted);">Base de usuários, dados de demanda ("qual vinho todo mundo quer?"), prova de conceito do produto sem investimento.</p>
+          </div>
+          <div class="card card-wine">
+            <h3>Métrica de sucesso</h3>
+            <p style="font-size: 0.88rem; margin: 0;">500 usuários cadastrando alerta de preço em 60 dias → demanda real comprovada.</p>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="margin-top: 16px;">Checklist de lançamento</h3>
+      <ul class="checklist">
+        <li><div class="chk" onclick="toggle(this)"></div>Scraper das 5 maiores lojas online de vinho do Brasil</li>
+        <li><div class="chk" onclick="toggle(this)"></div>Banco de dados de vinhos com nome normalizado (evitar "Catena Zapata" vs "DV Catena")</li>
+        <li><div class="chk" onclick="toggle(this)"></div>UI simples de busca + comparativo de preços</li>
+        <li><div class="chk" onclick="toggle(this)"></div>Alerta de preço por email (SendGrid grátis até 100/dia)</li>
+        <li><div class="chk" onclick="toggle(this)"></div>Pixel do Meta + GA4 para rastrear comportamento</li>
+        <li><div class="chk" onclick="toggle(this)"></div>Landing page com "lista de espera" para o clube</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- FASE 2 -->
+  <div class="phase-card">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <div class="phase-number">II</div>
+      <div class="phase-meta">
+        <div class="phase-title">Clube de Assinatura — "A curadoria que você não tem tempo de fazer"</div>
+        <div class="phase-sub">Meses 3–6 · Receita recorrente começa aqui</div>
+      </div>
+      <div class="phase-toggle">▾</div>
+    </div>
+    <div class="phase-body">
+      <p>Com a base de usuários do comparador, você lança o clube. O parceiro sommelier seleciona 2–3 vinhos por mês, você cuida da logística com um operador 3PL (terceirizado) e cobra uma assinatura mensal.</p>
+
+      <div class="card" style="background: var(--surface2);">
+        <h3>Modelos de assinatura</h3>
+        <table>
+          <thead><tr><th>Plano</th><th>Conteúdo</th><th>Preço/mês</th><th>Margem estimada</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Explorador</strong></td><td>2 garrafas curadas</td><td class="hl">R$ 149</td><td>~35%</td></tr>
+            <tr><td><strong>Sommelier</strong></td><td>3 garrafas + notas de degustação</td><td class="hl">R$ 229</td><td>~40%</td></tr>
+            <tr><td><strong>Colecionador</strong></td><td>6 garrafas + vinhos raros + frete grátis</td><td class="hl">R$ 429</td><td>~45%</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="grid-2" style="margin-top: 16px;">
+        <div class="card card-green">
+          <h3>Vantagem competitiva</h3>
+          <p style="font-size: 0.88rem; margin: 0;">Você sabe exatamente quais vinhos os usuários procuraram no comparador. A curadoria do clube não é um chute — é baseada em demanda real da sua própria base.</p>
+        </div>
+        <div class="card card-gold">
+          <h3>Logística sem dor de cabeça</h3>
+          <p style="font-size: 0.88rem; margin: 0;">Use operadores 3PL especializados em bebidas (como Patrus ou Jadlog Shops). Você não toca no estoque — só gerencia os pedidos pela plataforma.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FASE 3 -->
+  <div class="phase-card">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <div class="phase-number">III</div>
+      <div class="phase-meta">
+        <div class="phase-title">Compra Coletiva — "O diferencial que ninguém tem"</div>
+        <div class="phase-sub">Meses 6–12 · O coração do produto</div>
+      </div>
+      <div class="phase-toggle">▾</div>
+    </div>
+    <div class="phase-body">
+      <p>Aqui está a sua ideia original, adaptada legalmente. Um importador habilitado parceiro fecha lotes quando a demanda mínima é atingida. Você é a plataforma que agrega essa demanda.</p>
+
+      <div class="card card-wine" style="margin-bottom: 20px;">
+        <h3>O fluxo completo da compra coletiva</h3>
+        <div class="timeline" style="margin-top: 16px;">
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-label">Etapa 1</div>
+            <strong>Curadoria</strong> — Sommelier identifica um vinho argentino de alta qualidade com grande diferença de preço BR/AR
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-label">Etapa 2</div>
+            <strong>Oferta</strong> — App abre uma "rodada" com preço alvo, quantidade mínima e prazo (ex: 30 dias para 200 garrafas)
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-label">Etapa 3</div>
+            <strong>Intenção de compra</strong> — Usuários confirmam interesse e pré-autorizam o pagamento (não cobrado ainda)
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-label">Etapa 4</div>
+            <strong>Ativação</strong> — Meta atingida → importador fecha o pedido, pagamentos são capturados
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-label">Etapa 5</div>
+            <strong>Importação legal</strong> — Importador habilitado traz o lote com todos os impostos pagos, notas fiscais emitidas
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot" style="background: var(--gold)"></div>
+            <div class="tl-label">Resultado</div>
+            <strong>Entrega</strong> — Vinho chega com rastreamento. Preço final: ~40–60% menor que no varejo nacional
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="background: var(--surface2);">
+        <h3>Exemplo real: DV Catena Adrianna Vineyard</h3>
+        <div class="metric-row"><span class="metric-label">Preço na Argentina (Mendoza)</span><span class="metric-value">~R$ 80</span></div>
+        <div class="metric-row"><span class="metric-label">Impostos de importação (~180%)</span><span class="metric-value">~R$ 144</span></div>
+        <div class="metric-row"><span class="metric-label">Frete + seguro por garrafa (lote 500un)</span><span class="metric-value">~R$ 18</span></div>
+        <div class="metric-row"><span class="metric-label">Margem da plataforma (12%)</span><span class="metric-value">~R$ 29</span></div>
+        <div class="metric-row"><span class="metric-label" style="font-weight:600;">Preço final ao usuário</span><span class="metric-value hl">~R$ 271</span></div>
+        <div class="metric-row"><span class="metric-label">Preço no varejo brasileiro</span><span class="metric-value" style="text-decoration:line-through; color:var(--muted)">R$ 420–480</span></div>
+        <p style="margin: 12px 0 0; font-size: 0.85rem; color: var(--green);">→ Economia real de ~40% mesmo com todos os impostos pagos.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FASE 4 -->
+  <div class="phase-card">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <div class="phase-number">IV</div>
+      <div class="phase-meta">
+        <div class="phase-title">Importação Própria — "Capturar a margem total"</div>
+        <div class="phase-sub">Ano 2+ · Requer volume e capital de giro</div>
+      </div>
+      <div class="phase-toggle">▾</div>
+    </div>
+    <div class="phase-body">
+      <p>Com R$500k+ em GMV mensal, faz sentido habilitar o próprio CNPJ importador. Você deixa de pagar a margem do parceiro importador e captura mais ~15–20% por garrafa.</p>
+
+      <div class="card card-green">
+        <h3>Habilitação de importador — o que é necessário</h3>
+        <ul class="checklist">
+          <li><div class="chk done">✓</div>CNPJ ativo com CNAE de importação de bebidas alcoólicas</li>
+          <li><div class="chk done">✓</div>Habilitação no Siscomex (Receita Federal) — processo burocrático mas viável</li>
+          <li><div class="chk done">✓</div>Registro no MAPA (Ministério da Agricultura) para bebidas alcoólicas</li>
+          <li><div class="chk done">✓</div>Capital de giro para financiar o estoque em trânsito (30–90 dias)</li>
+          <li><div class="chk done">✓</div>Despachante aduaneiro especializado em bebidas</li>
+        </ul>
+      </div>
+      <p><strong>Dica:</strong> Contrate um advogado especializado em comércio exterior desde a Fase 3. O custo (~R$3–8k) é irrisório comparado ao risco de errar no processo.</p>
+    </div>
+  </div>
+
+</section>
+
+<!-- ========== TECH ========== -->
+<section id="tech" class="section">
+  <span class="eyebrow">Arquitetura Técnica</span>
+  <h1>Stack pensado para<br><em>crescer sem reescrever</em></h1>
+  <p>Como você vai desenvolver solo inicialmente, a prioridade é velocidade de entrega e facilidade de manutenção — não a stack mais sofisticada.</p>
+
+  <div class="card" style="margin-bottom: 24px;">
+    <h3>Stack recomendada</h3>
+    <div class="stack-row">
+      <div class="stack-layer">Frontend</div>
+      <div>
+        <div class="stack-tech">Next.js 14 (App Router) + Tailwind</div>
+        <div class="stack-why">SSR nativo para SEO (vinhos indexam bem no Google), deploy trivial na Vercel, um código para web e mobile via PWA</div>
+      </div>
+    </div>
+    <div class="stack-row">
+      <div class="stack-layer">Backend</div>
+      <div>
+        <div class="stack-tech">Next.js API Routes + tRPC</div>
+        <div class="stack-why">Evita manter um backend separado no MVP. Migra para microserviços depois se precisar.</div>
+      </div>
+    </div>
+    <div class="stack-row">
+      <div class="stack-layer">Banco</div>
+      <div>
+        <div class="stack-tech">PostgreSQL (Supabase) + Prisma ORM</div>
+        <div class="stack-why">Supabase dá auth, storage e realtime grátis no tier inicial. Prisma garante type-safety no acesso a dados.</div>
+      </div>
+    </div>
+    <div class="stack-row">
+      <div class="stack-layer">Scraping</div>
+      <div>
+        <div class="stack-tech">Python + Playwright + Redis Queue</div>
+        <div class="stack-why">Playwright lida com sites com JS. Redis gerencia a fila de scraping para não sobrecarregar os sites alvo.</div>
+      </div>
+    </div>
+    <div class="stack-row">
+      <div class="stack-layer">Pagamentos</div>
+      <div>
+        <div class="stack-tech">Stripe (global) + Pagar.me (BR)</div>
+        <div class="stack-why">Stripe para assinaturas (melhor UX), Pagar.me para PIX e boleto — essenciais no Brasil.</div>
+      </div>
+    </div>
+    <div class="stack-row">
+      <div class="stack-layer">Email</div>
+      <div>
+        <div class="stack-tech">Resend + React Email</div>
+        <div class="stack-why">Emails transacionais e de marketing. React Email permite criar templates em JSX — mesma linguagem do frontend.</div>
+      </div>
+    </div>
+    <div class="stack-row">
+      <div class="stack-layer">Infra</div>
+      <div>
+        <div class="stack-tech">Vercel (frontend) + Railway (scraper Python)</div>
+        <div class="stack-why">Vercel é grátis para projetos Next.js. Railway é simples para subir serviços Python com Redis.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <h2>Modelo de Dados Central</h2>
+
+  <div class="code-block">
+<span class="code-comment">-- VINHOS (entidade central — normalização é crítica)</span>
+<span class="code-keyword">CREATE TABLE</span> wines (
+  id           <span class="code-type">UUID</span>         <span class="code-pk">PRIMARY KEY</span>,
+  name         <span class="code-type">TEXT</span>         <span class="code-comment">NOT NULL,  -- "DV Catena Adrianna Vineyard"</span>
+  producer     <span class="code-type">TEXT</span>,                    <span class="code-comment">-- "Catena Zapata"</span>
+  country      <span class="code-type">TEXT</span>,                    <span class="code-comment">-- "Argentina"</span>
+  region       <span class="code-type">TEXT</span>,                    <span class="code-comment">-- "Mendoza"</span>
+  grape        <span class="code-type">TEXT[]</span>,                   <span class="code-comment">-- ["Malbec", "Cabernet"]</span>
+  vintage      <span class="code-type">INTEGER</span>,              <span class="code-comment">-- 2021</span>
+  type         <span class="code-type">TEXT</span>,                    <span class="code-comment">-- 'tinto','branco','espumante'</span>
+  vivino_id    <span class="code-type">TEXT</span>,                    <span class="code-comment">-- para puxar ratings</span>
+  avg_rating   <span class="code-type">FLOAT</span>,
+  slug         <span class="code-type">TEXT</span>         UNIQUE    <span class="code-comment">-- URL amigável para SEO</span>
+);
+
+<span class="code-comment">-- PREÇOS COLETADOS (nunca deletar — histórico é valioso)</span>
+<span class="code-keyword">CREATE TABLE</span> price_snapshots (
+  id           <span class="code-type">UUID</span>         <span class="code-pk">PRIMARY KEY</span>,
+  wine_id      <span class="code-type">UUID</span>         REFERENCES wines(id),
+  store        <span class="code-type">TEXT</span>,                    <span class="code-comment">-- 'evino','wine','vivino'</span>
+  price_brl    <span class="code-type">DECIMAL(10,2)</span>,
+  url          <span class="code-type">TEXT</span>,
+  in_stock     <span class="code-type">BOOLEAN</span>,
+  scraped_at   <span class="code-type">TIMESTAMPTZ</span> DEFAULT now()
+);
+
+<span class="code-comment">-- RODADAS DE COMPRA COLETIVA</span>
+<span class="code-keyword">CREATE TABLE</span> collective_rounds (
+  id           <span class="code-type">UUID</span>         <span class="code-pk">PRIMARY KEY</span>,
+  wine_id      <span class="code-type">UUID</span>         REFERENCES wines(id),
+  target_price <span class="code-type">DECIMAL(10,2)</span>,        <span class="code-comment">-- preço alvo ao usuário</span>
+  min_qty      <span class="code-type">INTEGER</span>,              <span class="code-comment">-- mínimo para ativar</span>
+  current_qty  <span class="code-type">INTEGER</span>      DEFAULT 0,
+  status       <span class="code-type">TEXT</span>         DEFAULT <span class="code-string">'open'</span>,  <span class="code-comment">-- open|funded|cancelled|delivered</span>
+  deadline     <span class="code-type">TIMESTAMPTZ</span>,
+  importer_id  <span class="code-type">UUID</span>         REFERENCES importers(id),
+  created_at   <span class="code-type">TIMESTAMPTZ</span> DEFAULT now()
+);
+
+<span class="code-comment">-- INTENÇÕES DE COMPRA</span>
+<span class="code-keyword">CREATE TABLE</span> pledges (
+  id           <span class="code-type">UUID</span>         <span class="code-pk">PRIMARY KEY</span>,
+  round_id     <span class="code-type">UUID</span>         REFERENCES collective_rounds(id),
+  user_id      <span class="code-type">UUID</span>         REFERENCES users(id),
+  qty          <span class="code-type">INTEGER</span>      DEFAULT 1,
+  stripe_pi_id <span class="code-type">TEXT</span>,                    <span class="code-comment">-- PaymentIntent pré-autorizado</span>
+  status       <span class="code-type">TEXT</span>         DEFAULT <span class="code-string">'pending'</span>, <span class="code-comment">-- pending|captured|refunded</span>
+  pledged_at   <span class="code-type">TIMESTAMPTZ</span> DEFAULT now()
+);
+  </div>
+
+  <hr>
+
+  <h2>O scraper — coração do comparador</h2>
+  <div class="code-block">
+<span class="code-comment"># scraper/evino.py — exemplo com Playwright</span>
+
+<span class="code-keyword">from</span> playwright.async_api <span class="code-keyword">import</span> async_playwright
+<span class="code-keyword">import</span> asyncio, json
+
+<span class="code-keyword">async def</span> scrape_evino(wine_name: str):
+    <span class="code-keyword">async with</span> async_playwright() <span class="code-keyword">as</span> p:
+        browser = <span class="code-keyword">await</span> p.chromium.launch(headless=True)
+        page = <span class="code-keyword">await</span> browser.new_page()
+
+        url = f<span class="code-string">"https://www.evino.com.br/busca?q={wine_name}"</span>
+        <span class="code-keyword">await</span> page.goto(url)
+        <span class="code-keyword">await</span> page.wait_for_selector(<span class="code-string">'.product-card'</span>)
+
+        results = <span class="code-keyword">await</span> page.evaluate(<span class="code-string">"""() => {
+            return [...document.querySelectorAll('.product-card')].map(el => ({
+                name:  el.querySelector('.name')?.innerText,
+                price: el.querySelector('.price')?.innerText,
+                url:   el.querySelector('a')?.href,
+            }))
+        }"""</span>)
+
+        <span class="code-keyword">await</span> browser.close()
+        <span class="code-keyword">return</span> results
+
+<span class="code-comment"># Normalização de nome — problema mais difícil do comparador</span>
+<span class="code-comment"># "DV Catena" == "D.V. Catena" == "Catena DV" → mesmo vinho</span>
+<span class="code-comment"># Use fuzzy matching (rapidfuzz) + revisão manual do sommelier</span>
+  </div>
+
+</section>
+
+<!-- ========== NEGÓCIO ========== -->
+<section id="negocio" class="section">
+  <span class="eyebrow">Modelo de Negócio</span>
+  <h1>Como o dinheiro<br><em>entra e sai</em></h1>
+
+  <div class="card card-wine" style="margin-bottom: 24px;">
+    <h3>Fontes de receita por fase</h3>
+    <table>
+      <thead><tr><th>Fase</th><th>Fonte</th><th>Modelo</th><th>Margem bruta</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tag tag-blue">F1</span> Comparador</td><td>Afiliação (CPA por clique que compra)</td><td>R$5–25 por conversão</td><td class="hl">100%</td></tr>
+        <tr><td><span class="tag tag-gold">F2</span> Clube</td><td>Assinatura mensal recorrente</td><td>R$149–429/mês/assinante</td><td class="hl">35–45%</td></tr>
+        <tr><td><span class="tag tag-wine">F3</span> Col. Coletiva</td><td>Comissão sobre GMV + margem de produto</td><td>12–18% sobre o pedido</td><td class="hl">40–55%</td></tr>
+        <tr><td><span class="tag tag-green">F4</span> Importação</td><td>Margem integral de importador</td><td>Markup direto</td><td class="hl">55–70%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr>
+
+  <h2>Projeção conservadora — 24 meses</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Ano 1</h3>
+      <div class="metric-row"><span class="metric-label">Usuários comparador</span><span class="metric-value">5.000</span></div>
+      <div class="metric-row"><span class="metric-label">Assinantes clube</span><span class="metric-value">300</span></div>
+      <div class="metric-row"><span class="metric-label">Rodadas coletivas</span><span class="metric-value">8 rodadas</span></div>
+      <div class="metric-row"><span class="metric-label">GMV total</span><span class="metric-value">~R$580k</span></div>
+      <div class="metric-row"><span class="metric-label">Receita líquida</span><span class="metric-value hl">~R$180k</span></div>
+    </div>
+    <div class="card card-wine">
+      <h3>Ano 2</h3>
+      <div class="metric-row"><span class="metric-label">Usuários comparador</span><span class="metric-value">25.000</span></div>
+      <div class="metric-row"><span class="metric-label">Assinantes clube</span><span class="metric-value">1.200</span></div>
+      <div class="metric-row"><span class="metric-label">Rodadas coletivas</span><span class="metric-value">30+ rodadas</span></div>
+      <div class="metric-row"><span class="metric-label">GMV total</span><span class="metric-value">~R$3,2M</span></div>
+      <div class="metric-row"><span class="metric-label">Receita líquida</span><span class="metric-value hl">~R$980k</span></div>
+    </div>
+  </div>
+
+  <hr>
+
+  <h2>Para o Pitch com Investidores</h2>
+
+  <blockquote>
+    "O mercado brasileiro de vinhos cresce 18% ao ano. Ninguém ainda resolveu o problema de preço de forma coletiva e legal. Nós temos a tecnologia, o sommelier e o modelo."
+  </blockquote>
+
+  <div class="grid-3" style="margin-top: 24px;">
+    <div class="card">
+      <h3>Por que agora?</h3>
+      <p style="font-size: 0.88rem; margin: 0;">Pandemia criou uma nova geração de consumidores de vinho em casa. Classe média premium busca qualidade sem pagar preço de importadora tradicional.</p>
+    </div>
+    <div class="card">
+      <h3>O moat</h3>
+      <p style="font-size: 0.88rem; margin: 0;">Dados de demanda + relacionamento com importadores parceiros + reputação do sommelier. Cada rodada bem-sucedida fortalece os três.</p>
+    </div>
+    <div class="card">
+      <h3>A saída</h3>
+      <p style="font-size: 0.88rem; margin: 0;">Aquisição por Wine.com.br, Vivino ou grupo de bebidas (Ambev, por exemplo). Ou IPO se a escala justificar.</p>
+    </div>
+  </div>
+
+  <div class="card card-gold" style="margin-top: 16px;">
+    <h3>Parceiros estratégicos para buscar agora</h3>
+    <ul class="checklist">
+      <li><div class="chk" onclick="toggle(this)"></div><strong>Importador habilitado</strong> — procure na ABIA ou em grupos de importadores de SC/RS. Modelo de revenue share (sem exclusividade)</li>
+      <li><div class="chk" onclick="toggle(this)"></div><strong>Vivino</strong> — têm programa de parceiros para apps de comparação. Acesso a base de dados de vinhos já normalizada</li>
+      <li><div class="chk" onclick="toggle(this)"></div><strong>Sommelier certificado</strong> — seu parceiro. Credencial WSET mínimo nível 2 para dar credibilidade</li>
+      <li><div class="chk" onclick="toggle(this)"></div><strong>Operador logístico 3PL de bebidas</strong> — essencial para clube de assinatura sem tocar em estoque</li>
+      <li><div class="chk" onclick="toggle(this)"></div><strong>Advogado de comércio exterior</strong> — não pule essa etapa. R$5k preventivos valem mais que R$50k reativos</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ========== AÇÃO ========== -->
+<section id="acao" class="section">
+  <span class="eyebrow">Próximos Passos</span>
+  <h1>O que fazer<br><em>esta semana</em></h1>
+
+  <p>Tudo começa sem investimento. A única coisa que você precisa agora é de tempo e disciplina para validar antes de construir.</p>
+
+  <div class="ornament">⁂</div>
+
+  <div class="card card-wine" style="margin: 24px 0;">
+    <h3>Semana 1 — Validação da demanda (custo: R$ 0)</h3>
+    <ul class="checklist">
+      <li><div class="chk" onclick="toggle(this)"></div>Criar uma landing page simples (Carrd.co ou Framer — grátis) com proposta de valor e formulário de interesse</li>
+      <li><div class="chk" onclick="toggle(this)"></div>Postar em 3 grupos de vinho no Facebook/WhatsApp perguntando: "você pagaria X por Y se chegasse R$80 mais barato?"</li>
+      <li><div class="chk" onclick="toggle(this)"></div>Entrevistar 10 consumidores de vinho sobre hábitos de compra e frustração com preços</li>
+      <li><div class="chk" onclick="toggle(this)"></div>Identificar 2–3 importadores de vinho em SC/RS e mandar mensagem de apresentação</li>
+    </ul>
+  </div>
+
+  <div class="card card-gold">
+    <h3>Semana 2–3 — Primeiro protótipo técnico</h3>
+    <ul class="checklist">
+      <li><div class="chk" onclick="toggle(this)"></div>Scraper básico da Evino e Wine.com.br com Playwright (Python)</li>
+      <li><div class="chk" onclick="toggle(this)"></div>Banco de dados no Supabase — tabela wines + price_snapshots</li>
+      <li><div class="chk" onclick="toggle(this)"></div>Página de busca Next.js simples — pesquisa por nome, retorna preços</li>
+      <li><div class="chk" onclick="toggle(this)"></div>Deploy na Vercel — URL pública para mostrar para possíveis parceiros</li>
+    </ul>
+  </div>
+
+  <div class="card card-green">
+    <h3>Semana 4 — Parcerias e legalidade</h3>
+    <ul class="checklist">
+      <li><div class="chk" onclick="toggle(this)"></div>Abrir MEI ou LTDA (MEI não serve para importação — verifique com contador)</li>
+      <li><div class="chk" onclick="toggle(this)"></div>Consulta inicial com advogado de comércio exterior (1h = ~R$400)</li>
+      <li><div class="chk" onclick="toggle(this)"></div>Fechar parceria informal com importador para a fase de compra coletiva</li>
+      <li><div class="chk" onclick="toggle(this)"></div>Definir com o parceiro sommelier os 3 primeiros vinhos da curadoria</li>
+      <li><div class="chk" onclick="toggle(this)"></div>Aplicar ao Startup SC ou ACE Startups para mentoria gratuita</li>
+    </ul>
+  </div>
+
+  <hr>
+
+  <h2>Critério de go/no-go</h2>
+  <div class="card" style="background: var(--surface2);">
+    <table>
+      <thead><tr><th>Métrica</th><th>Prazo</th><th>Meta mínima</th></tr></thead>
+      <tbody>
+        <tr><td>Emails coletados na landing page</td><td>30 dias</td><td class="hl">200+</td></tr>
+        <tr><td>Confirmações de interesse em compra coletiva</td><td>30 dias</td><td class="hl">50+</td></tr>
+        <tr><td>Importador parceiro comprometido</td><td>45 dias</td><td class="hl">1 parceiro</td></tr>
+        <tr><td>Usuários ativos no comparador MVP</td><td>60 dias</td><td class="hl">500+</td></tr>
+      </tbody>
+    </table>
+    <p style="margin: 12px 0 0; font-size: 0.85rem; color: var(--muted);">Se após 60 dias nenhuma dessas metas for atingida, o problema não é grande o suficiente — ou a mensagem não está clara. Pivot antes de investir mais.</p>
+  </div>
+
+  <div class="card" style="text-align: center; padding: 40px; margin-top: 16px; background: linear-gradient(135deg, var(--wine-pale), transparent);">
+    <div class="ornament" style="opacity: 0.6;">❧</div>
+    <blockquote style="border: none; background: none; padding: 0; margin: 16px 0; font-size: 1.1rem; color: var(--wine);">
+      "O vinho não é feito em um dia.<br>Mas a uva precisa ser colhida na hora certa."
+    </blockquote>
+    <p style="margin: 0; font-size: 0.85rem;">Valide o problema. Construa o mínimo. Cresça com os dados.</p>
+  </div>
+</section>
+
+</main>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function togglePhase(header) {
+  const body = header.nextElementSibling;
+  const toggle = header.querySelector('.phase-toggle');
+  body.classList.toggle('open');
+  toggle.classList.toggle('open');
+}
+
+function toggle(el) {
+  el.classList.toggle('done');
+  el.textContent = el.classList.contains('done') ? '✓' : '';
+}
+</script>
+</body>
+</html>

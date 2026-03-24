@@ -1,0 +1,113 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Wine {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  producer  String?
+  country   String?
+  region    String?
+  grapes    String[]
+  vintage   Int?
+  type      WineType @default(TINTO)
+  vivinoId  String?  @map("vivino_id")
+  avgRating Float?   @map("avg_rating")
+  slug      String   @unique
+  imageUrl  String?  @map("image_url")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  priceSnapshots   PriceSnapshot[]
+  priceAlerts      PriceAlert[]
+  collectiveRounds CollectiveRound[]
+
+  @@map("wines")
+}
+
+enum WineType {
+  TINTO
+  BRANCO
+  ROSE
+  ESPUMANTE
+  SOBREMESA
+}
+
+model PriceSnapshot {
+  id        String   @id @default(uuid()) @db.Uuid
+  wineId    String   @map("wine_id") @db.Uuid
+  store     String
+  priceBrl  Decimal  @map("price_brl") @db.Decimal(10, 2)
+  url       String?
+  inStock   Boolean  @default(true) @map("in_stock")
+  scrapedAt DateTime @default(now()) @map("scraped_at")
+
+  wine Wine @relation(fields: [wineId], references: [id], onDelete: Cascade)
+
+  @@index([wineId, scrapedAt])
+  @@index([store, scrapedAt])
+  @@map("price_snapshots")
+}
+
+model PriceAlert {
+  id           String    @id @default(uuid()) @db.Uuid
+  userId       String    @map("user_id") @db.Uuid
+  wineId       String    @map("wine_id") @db.Uuid
+  targetPrice  Decimal?  @map("target_price") @db.Decimal(10, 2)
+  isActive     Boolean   @default(true) @map("is_active")
+  lastNotified DateTime? @map("last_notified")
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  wine Wine @relation(fields: [wineId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, wineId])
+  @@map("price_alerts")
+}
+
+model CollectiveRound {
+  id          String      @id @default(uuid()) @db.Uuid
+  wineId      String      @map("wine_id") @db.Uuid
+  targetPrice Decimal     @map("target_price") @db.Decimal(10, 2)
+  minQty      Int         @map("min_qty")
+  currentQty  Int         @default(0) @map("current_qty")
+  status      RoundStatus @default(OPEN)
+  deadline    DateTime
+  createdAt   DateTime    @default(now()) @map("created_at")
+
+  wine    Wine     @relation(fields: [wineId], references: [id])
+  pledges Pledge[]
+
+  @@map("collective_rounds")
+}
+
+enum RoundStatus {
+  OPEN
+  FUNDED
+  CANCELLED
+  DELIVERED
+}
+
+model Pledge {
+  id         String       @id @default(uuid()) @db.Uuid
+  roundId    String       @map("round_id") @db.Uuid
+  userId     String       @map("user_id") @db.Uuid
+  qty        Int          @default(1)
+  stripePiId String?      @map("stripe_pi_id")
+  status     PledgeStatus @default(PENDING)
+  pledgedAt  DateTime     @default(now()) @map("pledged_at")
+
+  round CollectiveRound @relation(fields: [roundId], references: [id])
+
+  @@map("pledges")
+}
+
+enum PledgeStatus {
+  PENDING
+  CAPTURED
+  REFUNDED
+}

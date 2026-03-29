@@ -8,15 +8,12 @@ export default function HomePage() {
 
   return (
     <div>
-      {/* Hero - Dark wine gradient */}
+      {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-to-br from-[#1a0a10] via-[#3d1225] to-[#5a1029] noise-overlay">
-        {/* Decorative elements */}
         <div className="absolute top-20 left-10 w-72 h-72 rounded-full bg-wine/20 blur-[100px]" />
         <div className="absolute bottom-10 right-10 w-96 h-96 rounded-full bg-gold/10 blur-[120px]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full border border-white/5" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full border border-white/5" />
 
-        <div className="relative z-10 mx-auto max-w-5xl px-4 py-24 lg:py-36 text-center">
+        <div className="relative z-10 mx-auto max-w-5xl px-4 py-20 lg:py-32 text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 mb-8 backdrop-blur-sm">
             <span className="h-2 w-2 rounded-full bg-gold animate-pulse" />
             <span className="font-mono text-xs uppercase tracking-widest text-gold/90">
@@ -24,11 +21,11 @@ export default function HomePage() {
             </span>
           </div>
 
-          <h1 className="font-heading text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.1] mb-6 gradient-text">
+          <h1 className="font-heading text-4xl sm:text-5xl lg:text-7xl font-bold leading-[1.1] mb-6 gradient-text">
             {t("heroTitle")}
           </h1>
 
-          <p className="text-lg sm:text-xl text-white/60 max-w-2xl mx-auto mb-12 font-light leading-relaxed">
+          <p className="text-base sm:text-lg text-white/60 max-w-2xl mx-auto mb-10 font-light leading-relaxed">
             {t("heroSubtitle")}
           </p>
 
@@ -40,10 +37,11 @@ export default function HomePage() {
             />
           </div>
 
-          <div className="flex items-center justify-center gap-8 mt-12 text-white/40 font-mono text-xs uppercase tracking-widest">
+          <div className="flex items-center justify-center gap-4 sm:gap-8 mt-10 text-white/40 font-mono text-[10px] sm:text-xs uppercase tracking-widest">
             <span>Evino</span>
             <span className="h-1 w-1 rounded-full bg-white/20" />
-            <span>Wine.com.br</span>
+            <span className="hidden sm:inline">Wine.com.br</span>
+            <span className="sm:hidden">Wine</span>
             <span className="h-1 w-1 rounded-full bg-white/20" />
             <span>Vivino</span>
             <span className="h-1 w-1 rounded-full bg-white/20" />
@@ -51,37 +49,36 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Bottom gradient fade */}
         <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-bg to-transparent" />
       </section>
 
       {/* Stats bar */}
       <section className="relative -mt-8 z-20 mx-auto max-w-4xl px-4">
-        <div className="glass rounded-2xl px-8 py-6 shadow-xl">
+        <div className="glass rounded-2xl px-6 sm:px-8 py-6 shadow-xl">
           <div className="grid grid-cols-3 divide-x divide-border">
-            <div className="text-center px-4">
-              <p className="font-heading text-3xl font-bold text-wine">50+</p>
-              <p className="font-mono text-xs uppercase tracking-widest text-muted mt-1">Vinhos</p>
+            <div className="text-center px-2 sm:px-4">
+              <p className="font-heading text-2xl sm:text-3xl font-bold text-wine">50+</p>
+              <p className="font-mono text-[10px] sm:text-xs uppercase tracking-widest text-muted mt-1">Vinhos</p>
             </div>
-            <div className="text-center px-4">
-              <p className="font-heading text-3xl font-bold text-wine">4</p>
-              <p className="font-mono text-xs uppercase tracking-widest text-muted mt-1">Lojas</p>
+            <div className="text-center px-2 sm:px-4">
+              <p className="font-heading text-2xl sm:text-3xl font-bold text-wine">4</p>
+              <p className="font-mono text-[10px] sm:text-xs uppercase tracking-widest text-muted mt-1">Lojas</p>
             </div>
-            <div className="text-center px-4">
-              <p className="font-heading text-3xl font-bold text-wine">40%</p>
-              <p className="font-mono text-xs uppercase tracking-widest text-muted mt-1">Economia</p>
+            <div className="text-center px-2 sm:px-4">
+              <p className="font-heading text-2xl sm:text-3xl font-bold text-wine">40%</p>
+              <p className="font-mono text-[10px] sm:text-xs uppercase tracking-widest text-muted mt-1">Economia</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Value Props */}
+      {/* Wine showcase with images */}
       <section className="py-20 lg:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <span className="label-mono text-wine">{t("howItWorks")}</span>
-            <h2 className="font-heading text-4xl font-bold mt-3">
-              Simples, rápido e gratuito
+            <h2 className="font-heading text-3xl sm:text-4xl font-bold mt-3">
+              Simples, rapido e gratuito
             </h2>
           </div>
 
@@ -141,10 +138,10 @@ export default function HomePage() {
                       {prop.num}
                     </span>
                   </div>
-                  <h3 className="font-heading text-2xl font-semibold mb-3">
+                  <h3 className="font-heading text-xl sm:text-2xl font-semibold mb-3">
                     {prop.title}
                   </h3>
-                  <p className="text-muted leading-relaxed">{prop.desc}</p>
+                  <p className="text-muted leading-relaxed text-sm">{prop.desc}</p>
                 </div>
               </div>
             ))}
@@ -152,34 +149,63 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* How it works - Visual flow */}
+      {/* How it works - SVG icons instead of emojis */}
       <section className="py-20 bg-gradient-to-b from-surface-2/50 to-bg">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <span className="label-mono text-gold">Passo a passo</span>
-            <h2 className="font-heading text-4xl font-bold mt-3">
+            <h2 className="font-heading text-3xl sm:text-4xl font-bold mt-3">
               {t("howItWorks")}
             </h2>
           </div>
 
           <div className="relative">
-            {/* Connection line */}
-            <div className="hidden md:block absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent -translate-y-1/2" />
+            <div className="hidden md:block absolute top-10 left-[16%] right-[16%] h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 sm:gap-12">
               {[
-                { step: t("step1"), desc: t("step1Desc"), icon: "🔍" },
-                { step: t("step2"), desc: t("step2Desc"), icon: "📊" },
-                { step: t("step3"), desc: t("step3Desc"), icon: "🔔" },
+                {
+                  step: t("step1"),
+                  desc: t("step1Desc"),
+                  color: "text-wine",
+                  bg: "bg-wine-pale",
+                  icon: (
+                    <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  ),
+                },
+                {
+                  step: t("step2"),
+                  desc: t("step2Desc"),
+                  color: "text-gold",
+                  bg: "bg-gold-pale",
+                  icon: (
+                    <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 13h2v8H3V13zm6-4h2v12H9V9zm6-2h2v14h-2V7zm6-4h2v18h-2V3z" />
+                    </svg>
+                  ),
+                },
+                {
+                  step: t("step3"),
+                  desc: t("step3Desc"),
+                  color: "text-green",
+                  bg: "bg-green-pale",
+                  icon: (
+                    <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                    </svg>
+                  ),
+                },
               ].map((item, i) => (
                 <div key={i} className="relative text-center">
-                  <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-surface border-2 border-border shadow-lg mb-6 text-3xl relative z-10">
+                  <div className={`inline-flex items-center justify-center w-20 h-20 rounded-2xl ${item.bg} ${item.color} border border-border/50 shadow-sm mb-6 relative z-10`}>
                     {item.icon}
                   </div>
-                  <h3 className="font-heading text-2xl font-semibold mb-2">
+                  <h3 className="font-heading text-xl sm:text-2xl font-semibold mb-2">
                     {item.step}
                   </h3>
-                  <p className="text-muted">{item.desc}</p>
+                  <p className="text-muted text-sm">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -187,10 +213,79 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Wine images showcase */}
+      <section className="py-20 lg:py-28">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <span className="label-mono text-wine mb-3 block">Descubra</span>
+              <h2 className="font-heading text-3xl sm:text-4xl font-bold mb-6">
+                Os melhores vinhos sul-americanos
+              </h2>
+              <p className="text-muted leading-relaxed mb-8">
+                Argentina, Chile e Uruguai produzem alguns dos melhores vinhos do mundo.
+                Compare precos entre as principais lojas do Brasil e encontre a melhor oferta.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <Link href="/vinhos?country=Argentina">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-surface border border-border px-4 py-2 text-sm hover:border-wine/30 transition-colors">
+                    <span className="w-2 h-2 rounded-full bg-wine" />
+                    Argentina
+                  </span>
+                </Link>
+                <Link href="/vinhos?country=Chile">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-surface border border-border px-4 py-2 text-sm hover:border-gold/30 transition-colors">
+                    <span className="w-2 h-2 rounded-full bg-gold" />
+                    Chile
+                  </span>
+                </Link>
+                <Link href="/vinhos?country=Uruguay">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-surface border border-border px-4 py-2 text-sm hover:border-green/30 transition-colors">
+                    <span className="w-2 h-2 rounded-full bg-green" />
+                    Uruguai
+                  </span>
+                </Link>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-4">
+                <div className="rounded-2xl overflow-hidden aspect-[3/4] bg-gradient-to-br from-[#3d1225] to-[#1a0a10] flex items-end p-5">
+                  <div>
+                    <p className="font-heading text-lg text-white/90 font-semibold">Malbec</p>
+                    <p className="text-xs text-white/50 font-mono uppercase tracking-wider mt-1">Mendoza, AR</p>
+                  </div>
+                </div>
+                <div className="rounded-2xl overflow-hidden aspect-[3/3] bg-gradient-to-br from-[#b8943f]/20 to-[#f7f3ee] border border-border flex items-end p-5">
+                  <div>
+                    <p className="font-heading text-lg text-foreground font-semibold">Chardonnay</p>
+                    <p className="text-xs text-muted font-mono uppercase tracking-wider mt-1">Casablanca, CL</p>
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-4 pt-8">
+                <div className="rounded-2xl overflow-hidden aspect-[3/3] bg-gradient-to-br from-[#a8294f]/20 to-[#f7f3ee] border border-border flex items-end p-5">
+                  <div>
+                    <p className="font-heading text-lg text-foreground font-semibold">Tannat</p>
+                    <p className="text-xs text-muted font-mono uppercase tracking-wider mt-1">Canelones, UY</p>
+                  </div>
+                </div>
+                <div className="rounded-2xl overflow-hidden aspect-[3/4] bg-gradient-to-br from-[#2d6a4f] to-[#1a0a10] flex items-end p-5">
+                  <div>
+                    <p className="font-heading text-lg text-white/90 font-semibold">Carmenere</p>
+                    <p className="text-xs text-white/50 font-mono uppercase tracking-wider mt-1">Colchagua, CL</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
-      <section className="py-24 lg:py-32">
+      <section className="py-20 lg:py-28">
         <div className="mx-auto max-w-4xl px-4">
-          <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#1a0a10] via-[#3d1225] to-[#5a1029] p-12 lg:p-16 text-center noise-overlay">
+          <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#1a0a10] via-[#3d1225] to-[#5a1029] p-10 sm:p-12 lg:p-16 text-center noise-overlay">
             <div className="absolute top-10 left-10 w-48 h-48 rounded-full bg-gold/10 blur-[80px]" />
             <div className="absolute bottom-10 right-10 w-64 h-64 rounded-full bg-wine/20 blur-[80px]" />
 
@@ -198,7 +293,7 @@ export default function HomePage() {
               <h2 className="font-heading text-3xl sm:text-5xl font-bold mb-4 gradient-text">
                 {t("ctaTitle")}
               </h2>
-              <p className="text-lg text-white/60 mb-10 max-w-lg mx-auto">
+              <p className="text-base sm:text-lg text-white/60 mb-10 max-w-lg mx-auto">
                 {t("ctaSubtitle")}
               </p>
               <Link href="/auth/signup">

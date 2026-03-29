@@ -3,7 +3,10 @@ import { PrismaPg } from "@prisma/adapter-pg";
 
 const connectionString = process.env.DATABASE_URL ?? "postgresql://localhost:5432/adega_club";
 
-const adapter = new PrismaPg({ connectionString });
+const adapter = new PrismaPg({
+  connectionString,
+  ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
+});
 
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
 

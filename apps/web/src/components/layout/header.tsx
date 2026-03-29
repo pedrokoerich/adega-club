@@ -16,7 +16,7 @@ export function Header() {
   return (
     <header className={`sticky top-0 z-50 transition-all duration-300 ${
       isHome
-        ? "bg-transparent border-b border-white/5"
+        ? "bg-[#1a0a10]/80 backdrop-blur-md border-b border-white/10"
         : "border-b border-border bg-surface/95 backdrop-blur supports-[backdrop-filter]:bg-surface/80"
     }`}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

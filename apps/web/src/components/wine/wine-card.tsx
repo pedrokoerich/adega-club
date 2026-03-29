@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Badge } from "@/components/ui/badge";
@@ -28,18 +29,9 @@ const typeGradients: Record<string, string> = {
   SOBREMESA: "from-[#b8943f]/40 to-[#3d1225]",
 };
 
-const typeTextColor: Record<string, string> = {
-  TINTO: "text-white/90",
-  BRANCO: "text-foreground",
-  ROSE: "text-foreground",
-  ESPUMANTE: "text-foreground",
-  SOBREMESA: "text-white/90",
-};
-
 export function WineCard({ wine }: WineCardProps) {
   const t = useTranslations();
   const gradient = typeGradients[wine.type] ?? typeGradients.TINTO;
-  const textColor = typeTextColor[wine.type] ?? "text-white/90";
   const isLight = ["BRANCO", "ROSE", "ESPUMANTE"].includes(wine.type);
 
   return (
@@ -48,10 +40,12 @@ export function WineCard({ wine }: WineCardProps) {
         {/* Wine type gradient header with image placeholder */}
         <div className={`relative h-36 bg-gradient-to-br ${gradient} p-5 flex flex-col justify-between`}>
           {wine.imageUrl ? (
-            <img
+            <Image
               src={wine.imageUrl}
               alt={wine.name}
-              className="absolute inset-0 w-full h-full object-cover opacity-60"
+              fill
+              className="object-cover opacity-60"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
           ) : null}
           <div className="relative z-10 flex items-start justify-between">

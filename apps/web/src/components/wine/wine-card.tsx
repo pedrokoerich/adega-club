@@ -47,7 +47,13 @@ export function WineCard({ wine }: WineCardProps) {
               className="object-cover opacity-60"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
-          ) : null}
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <svg className={`w-16 h-16 ${isLight ? "text-muted/15" : "text-white/10"}`} fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2C9.5 2 7.5 4.5 7 7c-.5 2.5 0 4.5 1.5 6.2V19H9v1H8v2h8v-2h-1v-1h-.5v-5.8C16 12.5 16.5 10.5 16 8c-.5-3-2.5-6-4-6z"/>
+              </svg>
+            </div>
+          )}
           <div className="relative z-10 flex items-start justify-between">
             <Badge
               variant={isLight ? "muted" : "wine"}

@@ -65,7 +65,11 @@ export default async function WinesPage({ searchParams }: Props) {
             ))}
             {params.type && (
               <Link href={`/vinhos${params.q ? `?q=${params.q}` : ""}`}>
-                <Badge variant="muted">✕</Badge>
+                <Badge variant="muted">
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </Badge>
               </Link>
             )}
           </div>
@@ -89,7 +93,11 @@ export default async function WinesPage({ searchParams }: Props) {
               <Link
                 href={`/vinhos${params.q ? `?q=${params.q}` : ""}${params.type ? `${params.q ? "&" : "?"}type=${params.type}` : ""}`}
               >
-                <Badge variant="muted">✕</Badge>
+                <Badge variant="muted">
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </Badge>
               </Link>
             )}
           </div>

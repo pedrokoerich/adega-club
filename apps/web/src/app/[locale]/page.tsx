@@ -250,28 +250,40 @@ export default function HomePage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-4">
-                <div className="rounded-2xl overflow-hidden aspect-[3/4] bg-gradient-to-br from-[#3d1225] to-[#1a0a10] flex items-end p-5">
-                  <div>
+                <div className="rounded-2xl overflow-hidden aspect-[3/4] bg-gradient-to-br from-[#3d1225] to-[#1a0a10] flex flex-col items-center justify-center p-5 relative">
+                  <svg className="w-16 h-16 text-white/20 mb-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2C9.5 2 7.5 4.5 7 7c-.5 2.5 0 4.5 1.5 6.2V19H9v1H8v2h8v-2h-1v-1h-.5v-5.8C16 12.5 16.5 10.5 16 8c-.5-3-2.5-6-4-6zm0 2c1 0 2.5 2 3 4.5S15.5 12 14 13.5V19h-4v-5.5C8.5 12 8 10 8.5 8S11 4 12 4z"/>
+                  </svg>
+                  <div className="text-center">
                     <p className="font-heading text-lg text-white/90 font-semibold">Malbec</p>
                     <p className="text-xs text-white/50 font-mono uppercase tracking-wider mt-1">Mendoza, AR</p>
                   </div>
                 </div>
-                <div className="rounded-2xl overflow-hidden aspect-[3/3] bg-gradient-to-br from-[#b8943f]/20 to-[#f7f3ee] border border-border flex items-end p-5">
-                  <div>
+                <div className="rounded-2xl overflow-hidden aspect-square bg-gradient-to-br from-[#b8943f]/20 to-[#f7f3ee] border border-border flex flex-col items-center justify-center p-5">
+                  <svg className="w-14 h-14 text-gold/30 mb-3" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 2l-1 9c0 2.2 2.2 4 5 4s5-1.8 5-4L16 2H8zm4 11c-1.7 0-3-.9-3-2l.75-7h4.5L15 11c0 1.1-1.3 2-3 2zm-1 3v4H9v2h6v-2h-2v-4h-2z"/>
+                  </svg>
+                  <div className="text-center">
                     <p className="font-heading text-lg text-foreground font-semibold">Chardonnay</p>
                     <p className="text-xs text-muted font-mono uppercase tracking-wider mt-1">Casablanca, CL</p>
                   </div>
                 </div>
               </div>
               <div className="space-y-4 pt-8">
-                <div className="rounded-2xl overflow-hidden aspect-[3/3] bg-gradient-to-br from-[#a8294f]/20 to-[#f7f3ee] border border-border flex items-end p-5">
-                  <div>
+                <div className="rounded-2xl overflow-hidden aspect-square bg-gradient-to-br from-[#a8294f]/20 to-[#f7f3ee] border border-border flex flex-col items-center justify-center p-5">
+                  <svg className="w-14 h-14 text-wine/25 mb-3" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2C9.5 2 7.5 4.5 7 7c-.5 2.5 0 4.5 1.5 6.2V19H9v1H8v2h8v-2h-1v-1h-.5v-5.8C16 12.5 16.5 10.5 16 8c-.5-3-2.5-6-4-6zm0 2c1 0 2.5 2 3 4.5S15.5 12 14 13.5V19h-4v-5.5C8.5 12 8 10 8.5 8S11 4 12 4z"/>
+                  </svg>
+                  <div className="text-center">
                     <p className="font-heading text-lg text-foreground font-semibold">Tannat</p>
                     <p className="text-xs text-muted font-mono uppercase tracking-wider mt-1">Canelones, UY</p>
                   </div>
                 </div>
-                <div className="rounded-2xl overflow-hidden aspect-[3/4] bg-gradient-to-br from-[#2d6a4f] to-[#1a0a10] flex items-end p-5">
-                  <div>
+                <div className="rounded-2xl overflow-hidden aspect-[3/4] bg-gradient-to-br from-[#2d6a4f] to-[#1a0a10] flex flex-col items-center justify-center p-5">
+                  <svg className="w-16 h-16 text-white/20 mb-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 2l-1 9c0 2.2 2.2 4 5 4s5-1.8 5-4L16 2H8zm4 11c-1.7 0-3-.9-3-2l.75-7h4.5L15 11c0 1.1-1.3 2-3 2zm-1 3v4H9v2h6v-2h-2v-4h-2z"/>
+                  </svg>
+                  <div className="text-center">
                     <p className="font-heading text-lg text-white/90 font-semibold">Carmenere</p>
                     <p className="text-xs text-white/50 font-mono uppercase tracking-wider mt-1">Colchagua, CL</p>
                   </div>

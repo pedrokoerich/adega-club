@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { PriceTable } from "@/components/wine/price-table";
 import { PriceChart } from "@/components/wine/price-chart";
 import { AlertButton } from "@/components/wine/alert-button";
+import { MarketplaceListings } from "@/components/wine/marketplace-listings";
 import type { Metadata } from "next";
 
 interface Props {
@@ -114,6 +115,14 @@ export default async function WineDetailPage({ params }: Props) {
           {/* Price History Chart */}
           <Card>
             <PriceChart data={priceHistory} />
+          </Card>
+
+          {/* Marketplace Listings */}
+          <Card>
+            <h2 className="font-heading text-2xl font-semibold mb-4">
+              {t("listing.marketplaceListings")}
+            </h2>
+            <MarketplaceListings wineId={wine.id} />
           </Card>
         </div>
 

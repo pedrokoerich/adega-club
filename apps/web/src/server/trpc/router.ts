@@ -7,6 +7,8 @@ import { sellerRouter } from "./routers/seller";
 import { listingRouter } from "./routers/listing";
 import { walletRouter } from "./routers/wallet";
 import { orderRouter } from "./routers/order";
+import { chatRouter } from "./routers/chat";
+import { freighterRouter } from "./routers/freighter";
 
 export const appRouter = router({
   wine: wineRouter,
@@ -17,6 +19,8 @@ export const appRouter = router({
   listing: listingRouter,
   wallet: walletRouter,
   order: orderRouter,
+  chat: chatRouter,
+  freighter: freighterRouter,
 });
 
 export type AppRouter = typeof appRouter;

@@ -36,15 +36,28 @@ export default function WalletPage() {
     { enabled: !!user }
   );
 
-  const utils = trpc.useUtils();
-  const depositMutation = trpc.wallet.deposit.useMutation({
-    onSuccess: () => {
-      utils.wallet.getBalance.invalidate();
-      utils.wallet.transactions.invalidate();
-      setShowDeposit(false);
-      setDepositAmount("");
-    },
-  });
+  const [depositLoading, setDepositLoading] = useState(false);
+
+  async function handleStripeDeposit() {
+    const amount = parseFloat(depositAmount);
+    if (!amount || amount < 5) return;
+    setDepositLoading(true);
+    try {
+      const res = await fetch("/api/stripe/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amountUsd: amount }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch (err) {
+      console.error("Deposit error:", err);
+    } finally {
+      setDepositLoading(false);
+    }
+  }
 
   if (authLoading || balanceLoading) {
     return (
@@ -108,39 +121,25 @@ export default function WalletPage() {
               <div className="flex-1">
                 <Input
                   id="depositAmount"
-                  label="Valor (USD)"
+                  label="Valor (USD) - mín. $5.00"
                   type="number"
                   step="0.01"
-                  min="1"
+                  min="5"
                   value={depositAmount}
                   onChange={(e) => setDepositAmount(e.target.value)}
                   placeholder="100.00"
                 />
               </div>
-              <div className="flex gap-2">
-                <Button
-                  size="sm"
-                  onClick={() => depositMutation.mutate({
-                    amountUsd: parseFloat(depositAmount),
-                    paymentMethod: "PIX",
-                  })}
-                  disabled={!depositAmount || depositMutation.isPending}
-                >
-                  PIX
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => depositMutation.mutate({
-                    amountUsd: parseFloat(depositAmount),
-                    paymentMethod: "CREDIT_CARD",
-                  })}
-                  disabled={!depositAmount || depositMutation.isPending}
-                >
-                  Cartão
-                </Button>
-              </div>
+              <Button
+                onClick={handleStripeDeposit}
+                disabled={!depositAmount || parseFloat(depositAmount) < 5 || depositLoading}
+              >
+                {depositLoading ? "..." : "Pagar com Stripe"}
+              </Button>
             </div>
+            <p className="text-xs text-muted mt-2">
+              Pagamento seguro via Stripe. Aceita cartão de crédito e débito.
+            </p>
           </div>
         )}
       </Card>

@@ -7,6 +7,466 @@ datasource db {
   provider = "postgresql"
 }
 
+// ─── Marketplace: User & Seller ────────────────────────────────────────
+
+enum UserRole {
+  BUYER
+  SELLER
+  ADMIN
+}
+
+enum DocumentType {
+  CPF      // Brazil
+  CNPJ     // Brazil (business)
+  DNI      // Argentina
+  RUT      // Chile / Uruguay
+  CI       // Paraguay / Bolivia
+  PASSPORT // Generic
+}
+
+enum VerificationStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+model UserProfile {
+  id            String         @id @db.Uuid // same as Supabase auth user id
+  email         String         @unique
+  displayName   String         @map("display_name")
+  phone         String?
+  avatarUrl     String?        @map("avatar_url")
+  dateOfBirth   DateTime?      @map("date_of_birth")
+  documentType  DocumentType?  @map("document_type")
+  documentNumber String?       @map("document_number")
+  country       String         @default("BR") // ISO 3166-1 alpha-2
+  role          UserRole       @default(BUYER)
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+
+  sellerProfile SellerProfile?
+  addresses     Address[]
+  wallet        Wallet?
+  orders        Order[]        @relation("BuyerOrders")
+  sellerOrders  Order[]        @relation("SellerOrders")
+  reviewsGiven  Review[]       @relation("ReviewAuthor")
+  reviewsReceived Review[]     @relation("ReviewTarget")
+  conversations ConversationParticipant[]
+  messages      Message[]
+  listings      Listing[]
+
+  @@map("user_profiles")
+}
+
+enum SellerType {
+  INDIVIDUAL  // pessoa física / consumidor
+  BUSINESS    // loja / importador / PJ
+}
+
+model SellerProfile {
+  id                 String             @id @default(uuid()) @db.Uuid
+  userId             String             @unique @map("user_id") @db.Uuid
+  storeName          String             @map("store_name")
+  storeSlug          String             @unique @map("store_slug")
+  description        String?
+  logoUrl            String?            @map("logo_url")
+  sellerType         SellerType         @default(INDIVIDUAL) @map("seller_type")
+  verificationStatus VerificationStatus @default(PENDING) @map("verification_status")
+  commissionRate     Decimal            @default(0.10) @map("commission_rate") @db.Decimal(4, 3)
+  rating             Float?
+  totalSales         Int                @default(0) @map("total_sales")
+  createdAt          DateTime           @default(now()) @map("created_at")
+  updatedAt          DateTime           @updatedAt @map("updated_at")
+
+  user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("seller_profiles")
+}
+
+model Address {
+  id           String  @id @default(uuid()) @db.Uuid
+  userId       String  @map("user_id") @db.Uuid
+  label        String  @default("Casa") // Casa, Trabalho, etc.
+  street       String
+  number       String?
+  complement   String?
+  neighborhood String?
+  city         String
+  state        String
+  zipCode      String  @map("zip_code")
+  country      String  @default("BR")
+  isDefault    Boolean @default(false) @map("is_default")
+
+  user   UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orders Order[]
+
+  @@map("addresses")
+}
+
+// ─── Marketplace: Wallet & Credits ─────────────────────────────────────
+
+model Wallet {
+  id            String   @id @default(uuid()) @db.Uuid
+  userId        String   @unique @map("user_id") @db.Uuid
+  balanceUsd    Decimal  @default(0) @map("balance_usd") @db.Decimal(12, 2)
+  lockedUsd     Decimal  @default(0) @map("locked_usd") @db.Decimal(12, 2) // em custódia
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  user         UserProfile         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions WalletTransaction[]
+
+  @@map("wallets")
+}
+
+enum TransactionType {
+  DEPOSIT        // comprador deposita dinheiro real → créditos
+  WITHDRAWAL     // vendedor saca créditos → dinheiro real
+  PURCHASE       // créditos debitados na compra (movem para locked)
+  SALE_CREDIT    // créditos liberados ao vendedor após entrega
+  COMMISSION     // comissão da plataforma
+  REFUND         // reembolso ao comprador
+  FREIGHT_PAYMENT // pagamento ao freteiro
+}
+
+model WalletTransaction {
+  id          String          @id @default(uuid()) @db.Uuid
+  walletId    String          @map("wallet_id") @db.Uuid
+  type        TransactionType
+  amountUsd   Decimal         @map("amount_usd") @db.Decimal(12, 2)
+  description String?
+  orderId     String?         @map("order_id") @db.Uuid
+  externalRef String?         @map("external_ref") // ref do gateway de pagamento
+  createdAt   DateTime        @default(now()) @map("created_at")
+
+  wallet Wallet @relation(fields: [walletId], references: [id])
+  order  Order? @relation(fields: [orderId], references: [id])
+
+  @@index([walletId, createdAt])
+  @@map("wallet_transactions")
+}
+
+// ─── Marketplace: Listings ─────────────────────────────────────────────
+
+enum ListingCondition {
+  SEALED      // lacrado / novo
+  EXCELLENT   // excelente estado
+  GOOD        // bom estado
+}
+
+enum ListingStatus {
+  ACTIVE
+  PAUSED
+  SOLD_OUT
+  REMOVED
+}
+
+model Listing {
+  id          String           @id @default(uuid()) @db.Uuid
+  sellerId    String           @map("seller_id") @db.Uuid
+  wineId      String           @map("wine_id") @db.Uuid
+  title       String
+  description String?
+  priceUsd    Decimal          @map("price_usd") @db.Decimal(10, 2)
+  quantity    Int              @default(1)
+  condition   ListingCondition @default(SEALED)
+  status      ListingStatus    @default(ACTIVE)
+  shipsFrom   String?          @map("ships_from") // "Mendoza, Argentina"
+  createdAt   DateTime         @default(now()) @map("created_at")
+  updatedAt   DateTime         @updatedAt @map("updated_at")
+
+  seller     UserProfile    @relation(fields: [sellerId], references: [id])
+  wine       Wine           @relation(fields: [wineId], references: [id])
+  images     ListingImage[]
+  orderItems OrderItem[]
+  offers     Offer[]
+
+  @@index([sellerId])
+  @@index([wineId])
+  @@index([status, createdAt])
+  @@map("listings")
+}
+
+model ListingImage {
+  id        String  @id @default(uuid()) @db.Uuid
+  listingId String  @map("listing_id") @db.Uuid
+  url       String
+  order     Int     @default(0)
+  isPrimary Boolean @default(false) @map("is_primary")
+
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@map("listing_images")
+}
+
+// ─── Marketplace: Offers (oferta/contra-oferta) ────────────────────────
+
+enum OfferStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  COUNTERED
+  EXPIRED
+}
+
+model Offer {
+  id         String      @id @default(uuid()) @db.Uuid
+  listingId  String      @map("listing_id") @db.Uuid
+  buyerId    String      @map("buyer_id") @db.Uuid
+  amountUsd  Decimal     @map("amount_usd") @db.Decimal(10, 2)
+  quantity   Int         @default(1)
+  status     OfferStatus @default(PENDING)
+  parentId   String?     @map("parent_id") @db.Uuid // contra-oferta referencia oferta anterior
+  expiresAt  DateTime    @map("expires_at")
+  createdAt  DateTime    @default(now()) @map("created_at")
+
+  listing Listing @relation(fields: [listingId], references: [id])
+  parent  Offer?  @relation("OfferChain", fields: [parentId], references: [id])
+  counter Offer[] @relation("OfferChain")
+
+  @@map("offers")
+}
+
+// ─── Marketplace: Orders ───────────────────────────────────────────────
+
+enum OrderStatus {
+  PENDING_PAYMENT
+  PAID
+  AWAITING_SHIPMENT
+  SHIPPED
+  DELIVERED
+  COMPLETED       // comprador confirmou + vendedor recebeu créditos
+  CANCELLED
+  DISPUTED
+  REFUNDED
+}
+
+enum ShippingMethod {
+  SELLER_SHIPS    // vendedor envia
+  PLATFORM_SHIPS  // plataforma coordena (Melhor Envio)
+  FREIGHTER       // freteiro freelancer
+}
+
+model Order {
+  id               String         @id @default(uuid()) @db.Uuid
+  buyerId          String         @map("buyer_id") @db.Uuid
+  sellerId         String         @map("seller_id") @db.Uuid
+  status           OrderStatus    @default(PENDING_PAYMENT)
+  subtotalUsd      Decimal        @map("subtotal_usd") @db.Decimal(12, 2)
+  shippingUsd      Decimal        @default(0) @map("shipping_usd") @db.Decimal(12, 2)
+  commissionUsd    Decimal        @default(0) @map("commission_usd") @db.Decimal(12, 2)
+  totalUsd         Decimal        @map("total_usd") @db.Decimal(12, 2)
+  shippingMethod   ShippingMethod @default(SELLER_SHIPS) @map("shipping_method")
+  shippingAddressId String?       @map("shipping_address_id") @db.Uuid
+  estimatedDelivery DateTime?     @map("estimated_delivery")
+  deliveredAt      DateTime?      @map("delivered_at")
+  createdAt        DateTime       @default(now()) @map("created_at")
+  updatedAt        DateTime       @updatedAt @map("updated_at")
+
+  buyer           UserProfile         @relation("BuyerOrders", fields: [buyerId], references: [id])
+  seller          UserProfile         @relation("SellerOrders", fields: [sellerId], references: [id])
+  shippingAddress Address?            @relation(fields: [shippingAddressId], references: [id])
+  items           OrderItem[]
+  transactions    WalletTransaction[]
+  shipment        Shipment?
+  review          Review?
+  dispute         Dispute?
+
+  @@index([buyerId, createdAt])
+  @@index([sellerId, createdAt])
+  @@map("orders")
+}
+
+model OrderItem {
+  id         String  @id @default(uuid()) @db.Uuid
+  orderId    String  @map("order_id") @db.Uuid
+  listingId  String  @map("listing_id") @db.Uuid
+  quantity   Int
+  unitPriceUsd Decimal @map("unit_price_usd") @db.Decimal(10, 2)
+
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  listing Listing @relation(fields: [listingId], references: [id])
+
+  @@map("order_items")
+}
+
+// ─── Marketplace: Shipping & Freighter ─────────────────────────────────
+
+model FreighterProfile {
+  id                 String             @id @default(uuid()) @db.Uuid
+  userId             String             @unique @map("user_id") @db.Uuid
+  vehicleType        String?            @map("vehicle_type") // carro, van, etc.
+  description        String?
+  verificationStatus VerificationStatus @default(PENDING) @map("verification_status")
+  rating             Float?
+  totalDeliveries    Int                @default(0) @map("total_deliveries")
+  createdAt          DateTime           @default(now()) @map("created_at")
+
+  routes    FreightRoute[]
+  shipments Shipment[]
+
+  @@map("freighter_profiles")
+}
+
+model FreightRoute {
+  id           String   @id @default(uuid()) @db.Uuid
+  freighterId  String   @map("freighter_id") @db.Uuid
+  originCity   String   @map("origin_city")
+  originCountry String  @map("origin_country")
+  destCity     String   @map("dest_city")
+  destCountry  String   @map("dest_country")
+  departureDate DateTime? @map("departure_date")
+  frequency    String?  // "semanal", "quinzenal", "sob demanda"
+  maxBottles   Int?     @map("max_bottles")
+  pricePerBottleUsd Decimal? @map("price_per_bottle_usd") @db.Decimal(8, 2)
+  isActive     Boolean  @default(true) @map("is_active")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  freighter FreighterProfile @relation(fields: [freighterId], references: [id])
+
+  @@index([originCountry, destCountry])
+  @@map("freight_routes")
+}
+
+enum ShipmentStatus {
+  PENDING_PICKUP
+  PICKED_UP
+  IN_TRANSIT
+  CUSTOMS
+  OUT_FOR_DELIVERY
+  DELIVERED
+  FAILED
+}
+
+model Shipment {
+  id           String         @id @default(uuid()) @db.Uuid
+  orderId      String         @unique @map("order_id") @db.Uuid
+  freighterId  String?        @map("freighter_id") @db.Uuid
+  carrier      String?        // "Correios", "Jadlog", or freighter name
+  trackingCode String?        @map("tracking_code")
+  status       ShipmentStatus @default(PENDING_PICKUP)
+  insuranceUsd Decimal?       @map("insurance_usd") @db.Decimal(8, 2)
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+
+  order     Order             @relation(fields: [orderId], references: [id])
+  freighter FreighterProfile? @relation(fields: [freighterId], references: [id])
+  events    ShipmentEvent[]
+
+  @@map("shipments")
+}
+
+model ShipmentEvent {
+  id         String   @id @default(uuid()) @db.Uuid
+  shipmentId String   @map("shipment_id") @db.Uuid
+  status     ShipmentStatus
+  location   String?
+  notes      String?
+  photoUrl   String?  @map("photo_url")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  shipment Shipment @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+
+  @@map("shipment_events")
+}
+
+// ─── Marketplace: Chat ─────────────────────────────────────────────────
+
+model Conversation {
+  id           String   @id @default(uuid()) @db.Uuid
+  listingId    String?  @map("listing_id") @db.Uuid
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  participants ConversationParticipant[]
+  messages     Message[]
+
+  @@map("conversations")
+}
+
+model ConversationParticipant {
+  id             String   @id @default(uuid()) @db.Uuid
+  conversationId String   @map("conversation_id") @db.Uuid
+  userId         String   @map("user_id") @db.Uuid
+  lastReadAt     DateTime? @map("last_read_at")
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user         UserProfile  @relation(fields: [userId], references: [id])
+
+  @@unique([conversationId, userId])
+  @@map("conversation_participants")
+}
+
+model Message {
+  id             String   @id @default(uuid()) @db.Uuid
+  conversationId String   @map("conversation_id") @db.Uuid
+  senderId       String   @map("sender_id") @db.Uuid
+  content        String
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender       UserProfile  @relation(fields: [senderId], references: [id])
+
+  @@index([conversationId, createdAt])
+  @@map("messages")
+}
+
+// ─── Marketplace: Reviews & Disputes ───────────────────────────────────
+
+model Review {
+  id        String   @id @default(uuid()) @db.Uuid
+  orderId   String   @unique @map("order_id") @db.Uuid
+  authorId  String   @map("author_id") @db.Uuid
+  targetId  String   @map("target_id") @db.Uuid
+  rating    Int      // 1-5
+  comment   String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  order  Order       @relation(fields: [orderId], references: [id])
+  author UserProfile @relation("ReviewAuthor", fields: [authorId], references: [id])
+  target UserProfile @relation("ReviewTarget", fields: [targetId], references: [id])
+
+  @@map("reviews")
+}
+
+enum DisputeStatus {
+  OPEN
+  IN_REVIEW
+  RESOLVED_BUYER
+  RESOLVED_SELLER
+  CLOSED
+}
+
+model Dispute {
+  id         String        @id @default(uuid()) @db.Uuid
+  orderId    String        @unique @map("order_id") @db.Uuid
+  openedById String        @map("opened_by_id") @db.Uuid
+  reason     String
+  status     DisputeStatus @default(OPEN)
+  resolution String?
+  createdAt  DateTime      @default(now()) @map("created_at")
+  updatedAt  DateTime      @updatedAt @map("updated_at")
+
+  order    Order            @relation(fields: [orderId], references: [id])
+  messages DisputeMessage[]
+
+  @@map("disputes")
+}
+
+model DisputeMessage {
+  id        String   @id @default(uuid()) @db.Uuid
+  disputeId String   @map("dispute_id") @db.Uuid
+  senderId  String   @map("sender_id") @db.Uuid
+  content   String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  dispute Dispute @relation(fields: [disputeId], references: [id], onDelete: Cascade)
+
+  @@map("dispute_messages")
+}
+
+// ─── Core: Wine Catalog ────────────────────────────────────────────────
+
 model Wine {
   id        String   @id @default(uuid()) @db.Uuid
   name      String
@@ -26,6 +486,7 @@ model Wine {
   priceSnapshots   PriceSnapshot[]
   priceAlerts      PriceAlert[]
   collectiveRounds CollectiveRound[]
+  listings         Listing[]
 
   @@map("wines")
 }

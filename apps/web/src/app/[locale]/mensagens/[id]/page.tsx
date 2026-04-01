@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
+import { useRealtimeMessages } from "@/hooks/use-realtime-messages";
 import { use } from "react";
 
 interface Props {
@@ -25,8 +26,10 @@ export default function ConversationPage({ params }: Props) {
   const { data: conversation } = trpc.chat.getById.useQuery({ id });
   const { data: messagesData, isLoading } = trpc.chat.messages.useQuery(
     { conversationId: id },
-    { refetchInterval: 5000 }
   );
+
+  // Subscribe to real-time message updates via Supabase Realtime
+  useRealtimeMessages(id);
 
   const utils = trpc.useUtils();
   const sendMessage = trpc.chat.send.useMutation({
